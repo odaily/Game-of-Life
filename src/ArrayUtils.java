@@ -7,7 +7,6 @@ import java.awt.Color;
 import javalib.worldimages.*;
 
 public class ArrayUtils {
-
 	public int neighborsAlive(ArrayList<Cell> neighbors) {
 		int alive = 0;
 		for (Cell c : neighbors) {
