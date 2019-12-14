@@ -11,18 +11,21 @@ public class LifeWorld extends World {
 	ArrayList<ArrayList<Cell>> cells;
 	
 	// Utilities
-	BoardUtils bUT = new BoardUtils();
-	ArrayUtils aUT = new ArrayUtils();
+	BoardUtils bUT;
+	ArrayUtils aUT;
 
 	// Size of board
-	public static int SIZE = 20;
+	public static int SIZE;
 
-	// Boolean for weather life should be updating or not
+	// Boolean for whether life should be updating or not
 	boolean lifeInAction;
 
-	LifeWorld() {
+	LifeWorld(int size) {
+		LifeWorld.SIZE = size;
+		this.bUT = new BoardUtils(this);
+		this.aUT = new ArrayUtils();
 		this.cells = this.bUT.makeCells();
-		this.bUT.linkCells(this.cells);
+		this.bUT.linkNeighbors(this.cells);
 		this.lifeInAction = false;
 	}
 
@@ -46,9 +49,8 @@ public class LifeWorld extends World {
 
 	public void onKeyEvent(String key) {
 		if (key.equals("r")) {
-			LifeWorld resetWorld = new LifeWorld();
-			this.cells = resetWorld.cells;
-			this.lifeInAction = resetWorld.lifeInAction;
+			this.bUT.reset(this.cells);
+			this.lifeInAction = false;
 		}
 		if (key.equals(" ")) {
 			this.lifeInAction = !this.lifeInAction;
