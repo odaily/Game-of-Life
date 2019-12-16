@@ -57,11 +57,4 @@ public class Cell {
 	public int aliveNeighbors() {
 		return (new ArrayUtils()).neighborsAlive(this.neighbors);
 	}
-	
-	public Cell copy() {
-		Cell temp = new Cell(this.x, this.y);
-		temp.alive = this.alive;
-		temp.neighbors = this.neighbors;
-		return temp;
-	}
 }
