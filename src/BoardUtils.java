@@ -10,11 +10,11 @@ import javalib.worldimages.*;
 public class BoardUtils {
 	// int for limit of the for loops
 	int limit;
-	
+
 	BoardUtils(LifeWorld world) {
 		this.limit = world.SIZE;
 	}
-	
+
 	// Create 2D matrix of cells
 	public ArrayList<ArrayList<Cell>> makeCells() {
 		ArrayList<ArrayList<Cell>> tempCells = new ArrayList<ArrayList<Cell>>();
@@ -27,79 +27,28 @@ public class BoardUtils {
 		}
 		return tempCells;
 	}
-	
+
 	// Links cells to their neighbors
 	public void linkNeighbors(ArrayList<ArrayList<Cell>> cells) {
 		int max = this.limit - 1;
 		for (int r = 0; r < this.limit; r ++) {
 			for (int c = 0; c < this.limit; c ++) {
 				Cell current = cells.get(r).get(c);
-				if (c != 0) {
-					current.left = cells.get(r).get(c - 1);
-					
-					if (r != 0) {
-						current.topLeft = cells.get(r - 1).get(c - 1);
-					}
-					if (r + 1 != this.limit) {
-						current.botLeft = cells.get(r + 1).get(c - 1);
-					}
-				}
-				
-				if (c != max) {
-					current.right = cells.get(r).get(c + 1);
-					
-					if (r != 0) {
-						current.topRight = cells.get(r - 1).get(c + 1);
-					}
-					if (r + 1 != this.limit) {
-						current.botRight = cells.get(r + 1).get(c + 1);
-					}
-				}
-				
-				if (r != 0) {
-					current.top = cells.get(r - 1).get(c);
-				}
-				else {
-					current.top = cells.get(max).get(c);
-				}
-				
-				if (r + 1 != this.limit) {
-					current.bot = cells.get(r + 1).get(c);
-				}
-				else {
-					current.bot = cells.get(0).get(c);
-				}
-				
-				int mirrorLeft = ((c - 1) < 0 ? max : c - 1);
-				int mirrorRight = ((c + 1) == this.limit ? 0 : c + 1);
-				int mirrorTop = ((r - 1) < 0 ? max : r - 1);
-				int mirrorBot = ((r + 1) == this.limit ? 0 : r + 1);
 
-				if (current.topLeft == null) {
-					current.topLeft = cells.get(mirrorTop).get(mirrorLeft);
-				}
-				if (current.top == null) {
-					current.top = cells.get(max).get(c);
-				}
-				if (current.topRight == null) {
-					current.topRight = cells.get(mirrorTop).get(mirrorRight);
-				}
-				if (current.left == null) {
-					current.left = cells.get(r).get(max);
-				}
-				if (current.right == null) {
-					current.right = cells.get(r).get(0);
-				}
-				if (current.botLeft == null) {
-					current.botLeft = cells.get(mirrorBot).get(mirrorLeft);
-				}
-				if (current.bot == null) {
-					current.bot = cells.get(0).get(c);
-				}
-				if (current.botRight == null) {
-					current.botRight = cells.get(mirrorBot).get(mirrorRight);
-				}
-				
+				int left = ((c - 1) < 0 ? max : c - 1);
+				int right = ((c + 1) == this.limit ? 0 : c + 1);
+				int up = ((r - 1) < 0 ? max : r - 1);
+				int down = ((r + 1) == this.limit ? 0 : r + 1);
+
+				current.topLeft = cells.get(up).get(left);
+				current.top = cells.get(up).get(c);
+				current.topRight = cells.get(up).get(right);
+				current.left = cells.get(r).get(left);
+				current.right = cells.get(r).get(right);
+				current.botLeft = cells.get(down).get(left);
+				current.bot = cells.get(down).get(c);
+				current.botRight = cells.get(down).get(right);
+
 				ArrayList<Cell> neighborList = current.neighbors;
 				neighborList.add(current.topLeft);
 				neighborList.add(current.top);
@@ -118,14 +67,14 @@ public class BoardUtils {
 		for (int r = 0; r < this.limit; r ++) {
 			for (int c = 0; c < this.limit; c ++) {
 				Cell draw_cell = cells.get(r).get(c);
-				
+
 				background.placeImageXY(draw_cell.draw(),
 						(c * Cell.SIZE) + Cell.GAP,
 						(r * Cell.SIZE) + Cell.GAP);
 			}
 		}
 	}
-	
+
 	// resets the cells
 	public void reset(ArrayList<ArrayList<Cell>> cells) {
 		for (ArrayList<Cell> row : cells) {
@@ -135,7 +84,7 @@ public class BoardUtils {
 			}
 		}
 	}
-	
+
 	// Update whether or not the cell's should be alive or dead in the next tick
 	public void processLife(ArrayList<ArrayList<Cell>> cells) {
 		for (ArrayList<Cell> row : cells) {
@@ -151,7 +100,7 @@ public class BoardUtils {
 				}
 			}
 		}
-		
+
 		for (ArrayList<Cell> row : cells) {
 			for (Cell c : row) {
 				c.alive = c.nextLife;
